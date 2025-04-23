@@ -1,0 +1,131 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace cadastro
+{
+    internal class pessoa
+    {
+        public string nome;
+        public string cpf;
+        public int idade;
+        public bool prioritario;
+
+        public pessoa(string nome, string cpf, int idade)
+        {
+            this.nome = nome;
+            this.cpf = cpf;
+            this.idade = idade;
+            this.prioritario = idade >= 60;
+        }
+
+        public override string ToString()
+        {
+            return $"{nome} {(prioritario ? "(prioritário)" : "")}";
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using cadastro;
+
+class program
+{
+    static void Main()
+    {
+        List<pessoa> fila = new List<pessoa>();
+        string opcao;
+
+        do
+        {
+            Console.WriteLine("\n--- MENU ---");
+            Console.WriteLine("1 - cadastrar pessoa");
+            Console.WriteLine("2 - listar fila");
+            Console.WriteLine("3 - atender pessoa");
+            Console.WriteLine("q - sair");
+            Console.Write("escolha uma opção: ");
+            opcao = Console.ReadLine();
+
+            switch (opcao)
+            {
+                case "1":
+                    if (fila.Count >= 10)
+                    {
+                        Console.WriteLine("fila cheia, não é possível adicionar mais pessoas.");
+                        break;
+                    }
+
+                    Console.Write("Digite o nome: ");
+                    string nome = Console.ReadLine();
+
+                    Console.Write("Digite o cpf: ");
+                    string cpf = Console.ReadLine();
+
+                    Console.Write("Digite a idade: ");
+                    int idade = int.Parse(Console.ReadLine());
+
+                    pessoa nova = new pessoa(nome, cpf, idade);
+
+                    if (nova.prioritario && fila.Count > 0)
+                        fila.Insert(0, nova);
+                    else
+                        fila.Add(nova);
+
+                    Console.WriteLine("pessoa adicionada com perfeição");
+                    break;
+
+                case "2":
+                    Console.WriteLine("\nfila atual:");
+                    if (fila.Count == 0)
+                    {
+                        Console.WriteLine("a fila está vazia.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < fila.Count; i++)
+                        {
+                            Console.WriteLine($"{i + 1}. {fila[i]}");
+                        }
+                    }
+                    break;
+
+
+                case "3":
+                            if (fila.Count == 0)
+                            {
+                                Console.WriteLine("nenhuma pessoa na fila para atender.");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"atendendo: {fila[0]}");
+                                fila.RemoveAt(0);
+                            }
+                            break;
+
+                        case "q":
+                            Console.WriteLine("obrigado por comprar em nossa loja");
+                            break;
+
+                        default:
+                            Console.WriteLine("opção inválida. tente novamente.");
+                            break;
+                        }
+
+        } while (opcao != "q");
+    }
+}
